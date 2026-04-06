@@ -85,7 +85,7 @@ public class CandidateController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<Candidate> createCandidate(@RequestBody CandidateRequestDTO candidateDTO) {
+    public ResponseEntity<CandidateResponseDTO> createCandidate(@RequestBody CandidateRequestDTO candidateDTO) {
 
         Candidate candidate = new Candidate(candidateDTO);
         Set<Skill> candidateSkills = candidate.getSkills();
@@ -97,7 +97,9 @@ public class CandidateController {
             }
         }
 
-        return ResponseEntity.accepted().body(candidateService.save(candidate));
+        Candidate savedCandidate = candidateService.save(candidate);
+
+        return ResponseEntity.accepted().body(new CandidateResponseDTO(savedCandidate));
     }
 
     @DeleteMapping(value = "/{id}")

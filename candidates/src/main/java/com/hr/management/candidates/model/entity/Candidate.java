@@ -19,6 +19,7 @@ import java.util.Set;
 public class Candidate {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -30,7 +31,7 @@ public class Candidate {
     @Column
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "candidate_skill",
             joinColumns = @JoinColumn(name = "candidate_id"),

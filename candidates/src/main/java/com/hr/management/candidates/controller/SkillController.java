@@ -42,10 +42,12 @@ public class SkillController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<Skill> createSkill(@RequestBody SkillRequestDTO skillDTO) {
+    public ResponseEntity<SkillResponseDTO> createSkill(@RequestBody SkillRequestDTO skillDTO) {
 
         Skill skill = new Skill(skillDTO);
-        return ResponseEntity.accepted().body(skillService.save(skill));
+        skill = skillService.save(skill);
+
+        return ResponseEntity.accepted().body(new SkillResponseDTO(skill));
     }
 
     @DeleteMapping(value = "/{id}")

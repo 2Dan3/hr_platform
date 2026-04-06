@@ -34,6 +34,24 @@ const Candidates: React.FC = () => {
   const [searchName, setSearchName] = useState<string>("");
   const [skillFilter, setSkillFilter] = useState<number[]>([]);
 
+  const [showCreateRow, setShowCreateRow] = useState<boolean>(false);
+  const [newCandidate, setNewCandidate] = useState({
+    nameFull: "",
+    dateOfBirth: "",
+    contactNumber: "",
+    email: "",
+    skillIds: [] as number[]
+  });
+
+  const [showCreateNewSkill, setShowCreateNewSkill] = useState<boolean>(false);
+  const [newSkill, setNewSkill] = useState({
+      name: ""
+  });
+
+  const [selectedSkillOption, setSelectedSkillOption] = useState<string>("");
+
+
+
 // Init candidates and skills load-up
   useEffect(() => {
     fetchAllCandidates();
@@ -97,6 +115,17 @@ const Candidates: React.FC = () => {
     }
   };
 
+  const removeCandidate = async (candidateId: number) => {
+      try {
+        await axios.delete(`http://localhost:8080/api/candidates/${candidateId}`);
+        fetchAllCandidates();
+      } catch (err) {
+        console.error("Error removing the candidate: ", err);
+      }
+    };
+
+
+
   const removeSkillFromCandidate = async (candidateId: number, skillId: number) => {
     try {
       await axios.delete(`http://localhost:8080/api/candidates/${candidateId}/skills`, { data: [skillId] });
@@ -107,7 +136,14 @@ const Candidates: React.FC = () => {
   };
 
   const addSkillToCandidate = async (candidateId: number, skillId: number) => {
+
+    if (skillId == 0) {
+        setShowCreateNewSkill(prev => !prev);
+        return;
+    }
+
     if (!skillId) return;
+
     try {
       await axios.post(`http://localhost:8080/api/candidates/${candidateId}/skills`, [skillId]);
       fetchAllCandidates();
@@ -116,11 +152,58 @@ const Candidates: React.FC = () => {
     }
   };
 
+  const createSkill = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setSelectedSkillOption("");
+
+      try {
+        await axios.post("http://localhost:8080/api/skills/", { ...newSkill });
+
+        setShowCreateNewSkill(false);
+
+        setNewSkill({
+          name: ""
+        });
+
+        await fetchAllSkills();
+        await fetchAllCandidates();
+
+      } catch (err) {
+        console.error("Error creating new skill: ", err);
+      }
+  };
+
+  const createCandidate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:8080/api/candidates/", {
+        ...newCandidate,
+        dateOfBirth: newCandidate.dateOfBirth || null
+      });
+
+      setShowCreateRow(false);
+
+      setNewCandidate({
+        nameFull: "",
+        dateOfBirth: "",
+        contactNumber: "",
+        email: "",
+        skillIds: []
+      });
+
+      fetchAllCandidates();
+
+    } catch (err) {
+      console.error("Error creating the candidate: ", err);
+    }
+  };
+
   return (
     <div>
       <h1>Candidates</h1>
 
-      {/* Skill Filter */}
+      {/* Skill filter for candidates */}
       <form onSubmit={handleSkillSearch}>
         <select
           multiple
@@ -143,7 +226,7 @@ const Candidates: React.FC = () => {
         <input type="submit" value="Search by Skill" />
       </form>
 
-      {/* Name Search */}
+      {/* Name filter for candidates */}
       <form onSubmit={handleNameSearch}>
         <input
           type="search"
@@ -161,10 +244,13 @@ const Candidates: React.FC = () => {
             <th>Contact</th>
             <th>Email</th>
             <th>Skills</th>
-            <th>Add Skill</th>
+            <th>Assign Skill</th>
+            <th>Remove Candidate</th>
           </tr>
         </thead>
+
         <tbody>
+        
           {Array.isArray(candidates) && candidates.length > 0 ? (
             candidates.map((candidate) => (
               <tr key={candidate.id}>
@@ -188,11 +274,22 @@ const Candidates: React.FC = () => {
                 </td>
                 <td>
                   <select
-                    onChange={(e) =>
-                      addSkillToCandidate(candidate.id, Number(e.target.value))
-                    }
+                    value={selectedSkillOption}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSelectedSkillOption(val);
+
+                        if (val === "CreateNewSkill") {
+                          setShowCreateNewSkill(true);
+                        } else if (val) {
+                          addSkillToCandidate(candidate.id, Number(val));
+                        }
+
+                        setSelectedSkillOption("");
+                      }}
                   >
-                    <option value="">--Select Skill--</option>
+                    <option value="">--Select from skills--</option>
+                    <option value="CreateNewSkill">(Create new Skill)</option>
                     {skills
                       .filter(
                         (skill) =>
@@ -205,6 +302,14 @@ const Candidates: React.FC = () => {
                       ))}
                   </select>
                 </td>
+                <td>
+                    <img
+                      src="/remove.png"
+                      alt="Remove candidate"
+                      style={{ cursor: "pointer", marginLeft: "4px", width: "16px", height: "16px" }}
+                      onClick={() => removeCandidate(candidate.id)}
+                    />
+                </td>
               </tr>
             ))
           ) : (
@@ -212,8 +317,129 @@ const Candidates: React.FC = () => {
               <td colSpan={6}>No candidates found</td>
             </tr>
           )}
+
+          {showCreateRow && (
+           <tr>
+             <td>
+               <input
+                 type="text"
+                 value={newCandidate.nameFull}
+                 onChange={(e) =>
+                   setNewCandidate({ ...newCandidate, nameFull: e.target.value })
+                 }
+               />
+             </td>
+
+             <td>
+               <input
+                 type="date"
+                 value={newCandidate.dateOfBirth}
+                 onChange={(e) =>
+                   setNewCandidate({ ...newCandidate, dateOfBirth: e.target.value })
+                 }
+               />
+             </td>
+
+             <td>
+               <input
+                 type="number"
+                 value={newCandidate.contactNumber}
+                 onChange={(e) =>
+                   setNewCandidate({ ...newCandidate, contactNumber: e.target.value })
+                 }
+               />
+             </td>
+
+             <td>
+               <input
+                 type="email"
+                 value={newCandidate.email}
+                 onChange={(e) =>
+                   setNewCandidate({ ...newCandidate, email: e.target.value })
+                 }
+               />
+             </td>
+
+             <td>
+               <select
+                 size={1}
+                 multiple
+                 value={newCandidate.skillIds.map(String)}
+                 onChange={(e) =>
+                   setNewCandidate({
+                     ...newCandidate,
+                     skillIds: Array.from(
+                       e.target.selectedOptions,
+                       (option) => Number(option.value)
+                     )
+                   })
+                 }
+               >
+                 {skills.map((skill) => (
+                   <option key={skill.id} value={skill.id}>
+                     {skill.name}
+                   </option>
+                 ))}
+               </select>
+             </td>
+
+             <td>
+               <button onClick={createCandidate} disabled={!newCandidate.nameFull || !newCandidate.email || !newCandidate.contactNumber || !newCandidate.dateOfBirth}>
+                  Save
+               </button>
+             </td>
+           </tr>
+         )}
+         <tr>
+            <td>
+              <button onClick={ () => setShowCreateRow(prev => !prev)}>
+                  {showCreateRow ? "Cancel" : "Add new candidate"}
+              </button>
+            </td>
+         </tr>
+
         </tbody>
       </table>
+
+      {showCreateNewSkill && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+
+            <h3>Create New Skill</h3>
+
+            <input
+              type="text"
+              placeholder="Skill name"
+              value={newSkill.name}
+              onChange={(e) =>
+                setNewSkill({ ...newSkill, name: e.target.value })
+              }
+            />
+
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={createSkill}
+                disabled={!newSkill.name.trim()}
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowCreateNewSkill(false);
+                  setNewSkill({ name: "" });
+                  setSelectedSkillOption("");
+                }}
+                style={{ marginLeft: "10px" }}
+              >
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 

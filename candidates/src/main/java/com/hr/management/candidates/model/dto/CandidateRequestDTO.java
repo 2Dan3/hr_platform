@@ -1,5 +1,6 @@
 package com.hr.management.candidates.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class CandidateRequestDTO{
 
     private String nameFull;
+//    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
     private String contactNumber;
     private String email;

@@ -49,6 +49,7 @@ public class CandidateSqlServiceImpl implements CandidateService {
 
     @Override
     public void delete(Candidate candidate) {
+        candidate.getSkills().clear();
         candidateRepository.delete(candidate);
     }
 
