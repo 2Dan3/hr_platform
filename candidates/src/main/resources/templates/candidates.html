@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/base.html :: layout(~{::title}, ~{::link}, ~{::script}, ~{::centralniDiv})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="link">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/StiloviTabela.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    </th:block>
+
+    <th:block th:fragment="script">
+        <script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+                <script th:src="@{/js/locale.js}"></script>
+    </th:block>
+    <title th:fragment="title" th:text="#{data.candidates}"></title>
+</head>
+<body>
+<!--<div id="navContent" th:replace="~{fragments/header.html :: header}"></div>-->
+
+<div th:fragment="centralniDiv">
+    <!--    <form method="get">-->
+    <table class="tabela">
+        <caption th:text="#{data.candidates}"></caption>
+        <!--            <form method="get">-->
+        <tr>
+            <th th:text="#{search.skills}"></th>
+            <th></th>
+            <th th:text="#{search.nameFull}"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <form method="get" th:action="@{/candidates/withSkills}">
+                <th>
+                    <select name="skillId" id="skillSearchSelect" multiple size="1">
+                        <option th:each="iterSkill, status: ${skills}" th:value="${iterSkill.id}" th:text="${iterSkill.name}">
+
+                        </option>
+                    </select>
+                </th>
+                <th><input type="submit" th:value="#{action.searchSkills}"/></th>
+            </form>
+
+            <form method="get" th:action="@{/candidates/all}">
+                <th><input type="search" name="name" th:value="${param.name}?: null"/></th>
+                <th><input type="submit" th:value="#{action.searchNameFull}"/></th>
+            </form>
+
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <!--            </form>-->
+
+        <tr>
+            <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+        </tr>
+        <tr>
+            <th></th>
+            <th></th>
+            <th th:text="#{data.nameFull}"></th>
+            <th th:text="#{data.dateOfBirth}"></th>
+            <th></th>
+            <th th:text="#{data.contactNumber}"></th>
+            <th th:text="#{data.email}"></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr th:each="iterCandidate, status: ${candidates}">
+            <!--                <td th:value="${status.index + 1}"></td>-->
+            <form method="post" th:action="@{/api/candidates/{id}/skills(id=${iterCandidate.id})}">                <td>
+                    <select name="skillId" id="skillAddToCandidateSelect" multiple size="1">
+                        <option th:each="iterPersonalSkill: ${iterCandidate.skills}" th:value="${iterPersonalSkill.id}" th:text="${iterPersonalSkill.name}"></option>
+                    </select>
+                </td>
+                <td><input type="submit" th:value="#{action.addSkillToCandidate}"/></td>
+            </form>
+
+            <td th:text="${iterCandidate.nameFull}"></td>
+            <td></td>
+            <td th:text="${#dates.format(iterCandidate.dateOfBirth, 'yyyy-MM-dd')}"></td>
+<!--            <td th:text="${#dates.format(iterFlight.departureTimestamp, 'yyyy-MM-dd HH:mm')}"></td>-->
+
+            <!--                <td th:inline="text" th:text="|${iterFlight.flightTicketPrice}RSD|"></td>-->
+<!--            <td th:inline="text">-->
+<!--                    <span th:if="${iterFlight.discountStandard.discountCoefficient > 0.0}">-->
+<!--                        <s th:text="|${iterFlight.flightTicketPrice} #{currency}|"></s>-->
+<!--                        <span th:text="| ${(1 - iterFlight.discountStandard.discountCoefficient) * iterFlight.flightTicketPrice} #{currency} |"></span>-->
+<!--                    </span>-->
+<!--                <span th:unless="${iterFlight.discountStandard.discountCoefficient > 0.0}"-->
+<!--                      th:text="|${iterFlight.flightTicketPrice} #{currency}|"></span>-->
+<!--            </td>-->
+
+            <td th:text="${iterCandidate.contactNumber}"></td>
+            <td th:text="${iterCandidate.email}"></td>
+            <td></td>
+            <td></td>
+<!--            <td>-->
+<!--                <input readonly type="time" th:value="|${#numbers.formatInteger(iterFlight.flightDurationMinutes / 60, 2)}:${#numbers.formatInteger(iterFlight.flightDurationMinutes % 60, 2)}|"/>-->
+<!--            </td>-->
+<!--            <td th:inline="text" th:text="|${#numbers.formatInteger(iterFlight.discountStandard.discountCoefficient * 100, 1)}%|"></td>-->
+<!--            &lt;!&ndash;                <td><a th:href="|flights/details?id=${iterFlight.id}|" th:text="Tickets"></a></td>&ndash;&gt;-->
+<!--            &lt;!&ndash;                todo add multiple flightIDs when connecting flights are implemented &ndash;&gt;-->
+<!--            <td><a th:href="|reservations/create?flightId=${iterFlight.id}|" th:text="#{data.tickets}"></a></td>-->
+
+<!--            <td><a th:if="${session.loggedUser != null and session.loggedUser.admin}" th:href="|flights/setup?flightId=${iterFlight.id}|" th:text="#{action.editFlight}"></a></td>-->
+        </tr>
+    </table>
+    <!--    </form>-->
+    <ul>
+        <li><a th:href="@{/api/candidates/}" th:text="#{action.addCandidate}"></a></li>
+    </ul>
+</div>
+</body>
+</html>

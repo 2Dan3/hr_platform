@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+    <!--    <script th:src="@{js/locale.js}"></script>-->
+    <th:block th:replace="${scr}">
+
+    </th:block>
+    <title>Header</title>
+</head>
+<body>
+
+<header id="navContent" th:fragment="header(scr)">
+    <div id="header-content-main">
+
+        <!-- LEFT GROUP -->
+        <div class="header-left">
+            <a th:href="@{/api/candidates/index}" th:text="#{data.candidates}"></a>
+            <a th:href="@{/api/skills/index}" th:text="#{data.skills}"></a>
+        </div>
+
+        <!-- RIGHT GROUP -->
+        <div class="header-right">
+
+            <div id="locales-container">
+                <div id="locale-img-container">
+                    <img th:src="|@{/img}/${#locale}_icon.png|" class="round" id="locale-img" th:alt="|(${#locale})|" />
+                </div>
+                <span class="text-white" th:text="#{lang.change}"></span>:
+                <select id="locales" name="locales" th:with="language=${#locale.language}">
+                    <!--                    <option value=""></option>-->
+                    <option value="en" th:text="#{lang.eng}" th:selected="${#strings.equals(language,'en')}"></option>
+                    <option value="sr" th:text="#{lang.sr}" th:selected="${#strings.equals(language,'sr')}"></option>
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+</header>
+
+</body>
+</html>
