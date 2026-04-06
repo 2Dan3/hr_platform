@@ -14,7 +14,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     List<Candidate> findAllBySkills_Name(String name);
 
-    List<Candidate> findAllByNameFull(String name);
+    List<Candidate> findAllByNameFullContainingIgnoreCase(String name);
 
     @Query(
             nativeQuery = true,

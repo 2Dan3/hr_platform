@@ -2,6 +2,7 @@ package com.hr.management.candidates.service.impl;
 
 import com.hr.management.candidates.model.dto.SkillAddDTO;
 import com.hr.management.candidates.model.entity.Candidate;
+import com.hr.management.candidates.model.entity.Skill;
 import com.hr.management.candidates.repository.CandidateRepository;
 import com.hr.management.candidates.service.CandidateService;
 import com.hr.management.candidates.service.SkillService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +40,7 @@ public class CandidateSqlServiceImpl implements CandidateService {
     }
 
     @Override
-    public List<Candidate> findAllByName(String name) { return candidateRepository.findAllByNameFull(name);}
+    public List<Candidate> findAllByName(String name) { return candidateRepository.findAllByNameFullContainingIgnoreCase(name);}
 
     @Override
     public Candidate save(Candidate candidate) {
@@ -50,6 +52,7 @@ public class CandidateSqlServiceImpl implements CandidateService {
         candidateRepository.delete(candidate);
     }
 
+    @Transactional
     @Override
     public void addSkillsToCandidate(List<Long> skillId, Candidate candidate) {
 //        Optional<Skill> foundSkill;
@@ -66,14 +69,22 @@ public class CandidateSqlServiceImpl implements CandidateService {
 //
 //        return candidateRepository.save(candidate);
 
+//        for (Long id : skillId) {
+//            this.candidateRepository.addSkillToCandidate(id, candidate.getId());
+//        }
+
         for (Long id : skillId) {
-            this.candidateRepository.addSkillToCandidate(id, candidate.getId());
+            Skill skill = skillService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Skill not found"));
+//            skill.getCandidates().add(candidate);
+            candidate.getSkills().add(skill);
         }
+        candidateRepository.save(candidate);
 
     }
 
     @Override
-    public void removeSkillsFromCandidate(List<SkillAddDTO> skillDTOs, Candidate candidate) {
+    public void removeSkillsFromCandidate(List<Long> skillId, Candidate candidate) {
 //        Optional<Skill> foundSkill;
 //        for (SkillAddDTO skillDTO : skillDTOs) {
 //
@@ -88,9 +99,17 @@ public class CandidateSqlServiceImpl implements CandidateService {
 //
 //        return candidateRepository.save(candidate);
 
-        for (SkillAddDTO skillDTO : skillDTOs) {
-            this.candidateRepository.removeSkillFromCandidate(skillDTO.getId(), candidate.getId());
+//        for (SkillAddDTO skillDTO : skillId) {
+//            this.candidateRepository.removeSkillFromCandidate(skillDTO.getId(), candidate.getId());
+//        }
+
+        for (Long id : skillId) {
+            Skill skill = skillService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Skill not found"));
+//            skill.getCandidates().add(candidate);
+            candidate.getSkills().remove(skill);
         }
+        candidateRepository.save(candidate);
 
     }
 

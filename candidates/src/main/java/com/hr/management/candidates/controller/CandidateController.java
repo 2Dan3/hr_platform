@@ -3,7 +3,6 @@ package com.hr.management.candidates.controller;
 import com.hr.management.candidates.model.dto.CandidateRequestDTO;
 import com.hr.management.candidates.model.dto.CandidateResponseDTO;
 import com.hr.management.candidates.model.dto.SkillAddDTO;
-import com.hr.management.candidates.model.dto.SkillRequestDTO;
 import com.hr.management.candidates.model.entity.Candidate;
 import com.hr.management.candidates.model.entity.Skill;
 import com.hr.management.candidates.service.CandidateService;
@@ -15,13 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("${api.prefix}/candidates")
 public class CandidateController {
 
@@ -43,7 +41,7 @@ public class CandidateController {
     }
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<CandidateResponseDTO>> getAllNameOptional(@Param("name") String name) {
+    public ResponseEntity<List<CandidateResponseDTO>> getAllNameOptional(@RequestParam(required = false, value = "name") String name) {
 
         List<Candidate> candidates;
 
@@ -59,9 +57,15 @@ public class CandidateController {
     }
 
     @GetMapping(value = "/withSkills")
-    public ResponseEntity<List<CandidateResponseDTO>> getCandidatesPossessingSkills(@Param("skillId") List<Long> skillIds) {
+    public ResponseEntity<List<CandidateResponseDTO>> getCandidatesPossessingSkills(@RequestParam(required = false, value = "skillId[]") List<Long> skillIds) {
 
-        List<Candidate> candidates = candidateService.findAllPossessingSkills(skillIds);
+        List<Candidate> candidates;
+
+        if (skillIds == null || skillIds.isEmpty()) {
+            candidates = candidateService.findAll();
+        }else {
+            candidates = candidateService.findAllPossessingSkills(skillIds);
+        }
 
         List<CandidateResponseDTO> candidateDTOs = candidates.stream().map(CandidateResponseDTO::new).collect(Collectors.toList());
 
@@ -120,14 +124,14 @@ public class CandidateController {
     }
 
     @DeleteMapping(value = "/{id}/skills")
-    public ResponseEntity removeSkillsFromCandidate(@PathVariable("id") Long candidateId, @RequestBody List<SkillAddDTO> skillDTOs) {
+    public ResponseEntity removeSkillsFromCandidate(@PathVariable("id") Long candidateId, @RequestBody List<Long> skillId) {
 
         Optional<Candidate> foundCandidate = candidateService.findById(candidateId);
         if ( !foundCandidate.isPresent() ) {
             return ResponseEntity.notFound().build();
         }
 
-        candidateService.removeSkillsFromCandidate(skillDTOs, foundCandidate.get());
+        candidateService.removeSkillsFromCandidate(skillId, foundCandidate.get());
         return ResponseEntity.accepted().build();
     }
 
