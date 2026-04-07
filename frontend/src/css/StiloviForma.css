@@ -1,53 +1,3 @@
-table.forma {
-	border-collapse: collapse;
-	margin: 5px;
-}
-
-table.forma caption {
-	font-size: 16pt
-}
-
-table.forma th, td {
-	border: 1px solid Gray;
-	padding: 5px;
-}
-
-table.forma th {
-	text-align: right;
-	width: 150px;
-	color: white;
-	background-color: DodgerBlue;
-}
-
-table.forma td {
-	background-color: White;
-	min-width: 250px;
-}
-
-table.forma input, textarea, select {
-	width: 250px;
-	box-sizing: border-box;
-}
-
-table.forma input[type="checkbox"] {
-	width: 20px;
-}
-
-table.forma input[type="radio"] {
-	width: 20px;
-}
-
-p.greska {
-	color: red;
-}
-
-input[type="submit"] {
-    background-color: lightgrey;
-    border: 1px solid lightorange;
-}
-
-
-
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -69,4 +19,37 @@ input[type="submit"] {
   border-radius: 8px;
   min-width: 300px;
   text-align: center;
+}
+
+p.error {
+	color: red;
+}
+
+button, input[type=submit], select, option {
+    border-radius: 10px;
+    border: 3px solid #f4f8e6;
+    background-color: #f4f8e6;
+    color: gray;
+    margin: 5px;
+    min-width: 150px;
+    font-size: normal;
+}
+
+button:disabled {
+    background-color: red;
+    color: whitesmoke;
+    cursor: not-allowed;
+    opacity: 0.9;
+    font-weight: bold;
+}
+
+.btn-save {
+    background-color: lightgreen;
+}
+
+input {
+    border-radius: 10px;
+    background-color: #f4f8e6;
+    color: gray;
+    font-size: normal;
 }

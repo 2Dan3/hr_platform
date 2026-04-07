@@ -22,4 +22,6 @@ public interface CandidateService {
     void removeSkillsFromCandidate(List<Long> skillId, Candidate candidate);
 
     List<Candidate> findAllPossessingSkills(List<Long> skillIds);
+
+    Optional<Candidate> findbyEmail(String email);
 }

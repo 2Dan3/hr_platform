@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
@@ -36,4 +37,6 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
         "HAVING COUNT(DISTINCT s.id) = :size"
     )
     List<Candidate> findAllPossessingSkills(@Param("skills") List<Long> skillIds, @Param("size") long size);
+
+    Optional<Candidate> findByEmail(String email);
 }

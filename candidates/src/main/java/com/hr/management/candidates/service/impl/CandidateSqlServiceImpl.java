@@ -121,4 +121,9 @@ public class CandidateSqlServiceImpl implements CandidateService {
 
         return candidateRepository.findAllPossessingSkills(skillIds, skillIds.size());
     }
+
+    @Override
+    public Optional<Candidate> findbyEmail(String email) {
+        return candidateRepository.findByEmail(email);
+    }
 }

@@ -41,10 +41,6 @@ table input[type="radio"] {
 	width: 20px;
 }
 
-p.greska {
-	color: red;
-}
-
 input[type="submit"] {
     background-color: lightgrey;
     border: 1px solid lightorange;

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./css/StylesInvertedTable.css";
 import "./css/StiloviForma.css";
-import "./css/StiloviTabela.css";
-import "./css/header.css";
 
 interface Skill {
   id: number;
@@ -250,26 +248,28 @@ const Candidates: React.FC = () => {
         </thead>
 
         <tbody>
-        
+
           {Array.isArray(candidates) && candidates.length > 0 ? (
             candidates.map((candidate) => (
               <tr key={candidate.id}>
-                <td>{candidate.nameFull}</td>
-                <td>{formatDate(candidate.dateOfBirth)}</td>
-                <td>{candidate.contactNumber}</td>
-                <td>{candidate.email}</td>
+                <td className="wider">{candidate.nameFull}</td>
+                <td className="wider">{formatDate(candidate.dateOfBirth)}</td>
+                <td className="wider">{candidate.contactNumber}</td>
+                <td className="wider">{candidate.email}</td>
                 <td>
                   {Array.isArray(candidate.skills)
                     ? candidate.skills.map(s =>
-                        <span key={s.id} style={{ marginRight: "8px" }}>
-                            {s.name}
-                            <img
-                              src="/remove.png"
-                              alt="Remove skill"
-                              style={{ cursor: "pointer", marginLeft: "4px", width: "16px", height: "16px" }}
-                              onClick={() => removeSkillFromCandidate(candidate.id, s.id)}
-                            />
-                        </span>)
+                        <div className="skill-card-container">
+                            <span key={s.id} style={{ marginRight: "8px" }}>
+                                {s.name}
+                                <img
+                                  src="/remove.png"
+                                  alt="Remove skill"
+                                  style={{ cursor: "pointer", marginLeft: "4px", width: "16px", height: "16px" }}
+                                  onClick={() => removeSkillFromCandidate(candidate.id, s.id)}
+                                />
+                            </span>
+                        </div>)
                     : null}
                 </td>
                 <td>
@@ -384,7 +384,10 @@ const Candidates: React.FC = () => {
              </td>
 
              <td>
-               <button onClick={createCandidate} disabled={!newCandidate.nameFull || !newCandidate.email || !newCandidate.contactNumber || !newCandidate.dateOfBirth}>
+               <button
+                    className="btn-save"
+                    onClick={createCandidate}
+                    disabled={!newCandidate.nameFull || !newCandidate.email || !newCandidate.contactNumber || !newCandidate.dateOfBirth}>
                   Save
                </button>
              </td>
@@ -409,7 +412,7 @@ const Candidates: React.FC = () => {
 
             <input
               type="text"
-              placeholder="Skill name"
+              placeholder="e.g React"
               value={newSkill.name}
               onChange={(e) =>
                 setNewSkill({ ...newSkill, name: e.target.value })
@@ -418,6 +421,7 @@ const Candidates: React.FC = () => {
 
             <div style={{ marginTop: "10px" }}>
               <button
+                className="btn-save"
                 onClick={createSkill}
                 disabled={!newSkill.name.trim()}
               >
@@ -430,9 +434,8 @@ const Candidates: React.FC = () => {
                   setNewSkill({ name: "" });
                   setSelectedSkillOption("");
                 }}
-                style={{ marginLeft: "10px" }}
-              >
-                Cancel
+                style={{ marginLeft: "10px" }}>
+                    Cancel
               </button>
             </div>
 

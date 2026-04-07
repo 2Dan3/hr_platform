@@ -85,7 +85,11 @@ public class CandidateController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<CandidateResponseDTO> createCandidate(@RequestBody CandidateRequestDTO candidateDTO) {
+    public ResponseEntity<CandidateResponseDTO> createCandidate(@RequestBody CandidateRequestDTO candidateDTO) throws Exception {
+
+        if (candidateService.findbyEmail(candidateDTO.getEmail()).isPresent()) {
+            throw new Exception("Candidate with that email already exists! Creation was unsuccessful.");
+        }
 
         Candidate candidate = new Candidate(candidateDTO);
         Set<Skill> candidateSkills = candidate.getSkills();

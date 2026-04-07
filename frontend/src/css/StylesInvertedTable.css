@@ -3,11 +3,6 @@ table {
 	margin: 5px;
 }
 
-.inverted {
-    width: 100%;
-
-}
-
 img {
     max-width: 80px;
 }
@@ -26,10 +21,11 @@ table th {
 }
 
 table tr:nth-child(even) {
-	background-color: LightGray;
+	background-color: DodgerBlue;
+	color: white;
 }
 
-table input, textarea, select {
+table input, select {
 	box-sizing: border-box;
 }
 
@@ -37,15 +33,20 @@ table input[type="checkbox"] {
 	width: 20px;
 }
 
-table input[type="radio"] {
-	width: 20px;
+.skill-card-container {
+    width: fit-content;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #f4f8e6;
+    background-color: #f4f8e6;
+    color: gray;
+    display: inline-block;
+    margin: 5px;
+    font-size: small;
+    font-style: italic;
 }
 
-p.greska {
-	color: red;
-}
-
-input[type="submit"] {
-    background-color: lightgrey;
-    border: 1px solid lightorange;
+.wider {
+    min-width: 130px;
+    margin: 3px;
 }
