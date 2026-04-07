@@ -10,3 +10,5 @@ Personal Note:
 Switching frontends from Thymeleaf to React proved to be the most challenging thing in this project, having only learned *in theory about React's inner structure and principles of working a couple of years ago.
 Although it proved to be an easy-to-implement lightweight library, it was interesting to get more familiar with it in practice and to compare the time required for a frontend implementation, between React, Thymeleaf and Angular.
 If I had more time, I would fix the frontend file structure in React and decouple the components for a more maintainable code.
+
+Edit: From a domain standpoint, everything is fairly standard. The most complex thing in the project is probably just making sure that the Many-to-many entity relationship is handled properly within CRUD operations (as using Spring JPA Cascades did not make sense in this case, I only made sure to find subjects in the database and to then update both of the entities' relationships before saving, therefore avoiding detached state, e.g. when establishing references between already existing entities).
