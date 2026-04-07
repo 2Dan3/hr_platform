@@ -1,8 +1,13 @@
 How to open:
 -------
+*Edit: MySQL database is automatically created, as well as schema and test data, when the Springboot app is ran. 
+--
 Springboot Java app:                                                 from an IDE (e.g. IntellijIDEA) open project from its root [hr_platform] and run the candidates.src.main.java.com.hr.management.candidates.CandidatesApplication.java
+--
 SwaggerUI:                                                           http://localhost:8080/swagger-ui/index.html
+--
 Thymeleaf (leftover SSR page, before switching frontends to React):  http://localhost:8080/api/candidates/index
+--
 React:                                                               http://localhost:5173 (navigate to [hr_platform] -> frontend, execute [npm run dev] there)
 
 Personal Note:
