@@ -7,6 +7,6 @@ React:                                                               http://loca
 
 Personal Note:
 -------
-Switching frontends from Thymeleaf to React proved to be the most challenging thing in this project, having only learned about React's inner structure and principles of working a couple of years ago.
+Switching frontends from Thymeleaf to React proved to be the most challenging thing in this project, having only learned *in theory about React's inner structure and principles of working a couple of years ago.
 Although it proved to be an easy-to-implement lightweight library, it was interesting to get more familiar with it in practice and to compare the time required for a frontend implementation, between React, Thymeleaf and Angular.
 If I had more time, I would fix the frontend file structure in React and decouple the components for a more maintainable code.
