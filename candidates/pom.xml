@@ -41,6 +41,17 @@
 		<!--			<artifactId>spring-boot-starter</artifactId>-->
 		<!--		</dependency>-->
 
+<!--		<dependency>-->
+<!--			<groupId>org.springdoc</groupId>-->
+<!--			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>-->
+<!--			<version>2.5.0</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,31 +68,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Add dependencies for using Spring Session -->
-		<!--
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-core</artifactId>
-		</dependency>
-		-->
-
-		<!--		<dependency>-->
-		<!--			<groupId>org.springframework.session</groupId>-->
-		<!--			<artifactId>spring-session-jdbc</artifactId>-->
-		<!--		</dependency>-->
-
-		<!-- Provides session repository for Redis server session management -->
-		<!--
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
--->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -93,7 +79,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- DB related dependencies -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -105,7 +90,6 @@
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 
-		<!-- webjar bootstrap and jquery dependencies -->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
